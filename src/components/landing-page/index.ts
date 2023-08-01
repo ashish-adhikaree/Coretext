@@ -1,5 +1,3 @@
-export { default as Footer } from "./footer";
-export { default as Header } from "./header";
-export { default as Logo } from "./logo";
-export { default as QuickButton } from "./quickButton";
-export { default as SearchBar } from "./searchBar";
+export { default as Logo } from "./logo.component";
+export { default as SearchBar } from "./searchbar.component";
+export { default as Button } from "./button.component";
