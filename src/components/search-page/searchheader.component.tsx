@@ -5,51 +5,65 @@ import { Button, Logo } from "@/components";
 
 const SearchHeader = () => {
   const router = useRouter();
-  const searchValue = useRef<HTMLInputElement>(null);
-  const [value, setValue] = useState<string | string[] | undefined>("");
-  
+  const [searchValue, setSearchValue] = useState<string | string[]>("");
+
   useEffect(() => {
     if (router.query.q != undefined) {
-      setValue(router.query.q);
+      setSearchValue(router.query.q);
     }
   }, [router.query.q]);
 
-  const handleClick = (event: any) => {
+  const handleSearch = (event: React.FormEvent) => {
     event.preventDefault();
-    const inputValue = searchValue?.current?.value;
-    setValue(inputValue);
-    router.push(`/search?q=${inputValue}`);
+    router.push(`/search?q=${searchValue}`);
   };
 
-  const handleChange = (event: any) => {
-    setValue(event.target.value);
+  const handleSearchValueChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (event.target.value === null) return;
+    setSearchValue(event.target.value);
   };
 
   return (
-    <div className="flex justify-between items-center  p-5 mb-0 sticky top-0 bg-white">
-      <div className="flex items-center space-x-5 flex-grow">
-        <Logo />
-        <form className="w-full border max-w-screen-sm flex rounded-full hover:shadow-md focus-within:shadow-md items-center m-auto">
-          <input
-            value={value}
-            type="text"
-            ref={searchValue}
-            onChange={handleChange}
-            className="pl-6 flex-grow outline-none bg-transparent"
-          />
-          <AiOutlineSearch className="text-3xl text-gray-500 pl-3 mr-5 my-3" />
-
-          <button
-            className="hidden"
-            type="submit"
-            onClick={handleClick}
-          ></button>
-        </form>
-        <Button href="/upload">
-          Upload to Coretext
+    <>
+      <div className="flex justify-between items-center  p-5 mb-0 sticky top-0 bg-white space-x-3">
+        <div className="flex items-center space-x-5 flex-grow">
+          <Logo />
+          <div className="w-full max-w-screen-md flex items-center space-x-3">
+            <form className="w-full border grow flex rounded-full hover:shadow-md focus-within:shadow-md items-center m-auto">
+              <AiOutlineSearch className="text-2xl text-gray-500 mx-5 my-3" />
+              <input
+                type="text"
+                value={searchValue}
+                onChange={handleSearchValueChange}
+                placeholder="Type your query"
+                className="flex-grow outline-none bg-transparent"
+              />
+              <button
+                className="hidden"
+                type="submit"
+                onClick={handleSearch}
+              ></button>
+            </form>
+            <Button
+              onClick={handleSearch}
+              disabled={searchValue.length === 0 || searchValue === ""}
+            >
+              <p className="whitespace-nowrap">Coretext Search</p>
+            </Button>
+          </div>
+        </div>
+        <Button href="/upload" className="hidden md:block">
+          <p className="whitespace-nowrap">Upload to Coretext</p>
         </Button>
       </div>
-    </div>
+      <div className="px-5 my-2 flex items-center">
+        <Button href="/upload" className="block md:hidden">
+          <p className="whitespace-nowrap">Upload to Coretext</p>
+        </Button>
+      </div>
+    </>
   );
 };
 
